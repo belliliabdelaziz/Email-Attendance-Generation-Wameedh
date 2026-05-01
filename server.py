@@ -27,70 +27,233 @@ except ImportError:
 
 PORT        = 5050
 LOGO_CID    = "brand-logo"
-DEFAULT_LOGO = "logoBootcamp.png"
+QR_CID      = "qr-code"
+DEFAULT_LOGO = "assets/wameedh.png"
+HOLYTECH_LOGO = "assets/holytech_sticker.png"
 
 
 # ─────────────────────────────────────────────────────────────────────────────
 # Email helpers  (same logic as your original send_qr.py)
 # ─────────────────────────────────────────────────────────────────────────────
 
-def build_html(name: str, cfg: dict, logo_cid: str | None) -> str:
-    primary    = cfg.get("brand_primary",    "#0B4F6C")
-    accent     = cfg.get("brand_accent",     "#F5B700")
-    background = cfg.get("brand_background", "#F6F7FB")
-    text_color = cfg.get("brand_text",       "#1F2933")
-    brand_name = cfg.get("brand_name",       "Wameedh SC Bootcamp")
-    headline   = cfg.get("headline",         "Your QR code")
-    greeting   = cfg.get("greeting",         "Good luck and see you soon.")
+def build_html(name: str, cfg: dict, logo_cid: str | None, qr_cid: str | None) -> str:
+    """
+    IEEE-style formal email template for Wameedh SC x HolyTech.
+    Layout mirrors the look of IEEE conference communications:
+      - Dark navy header bar with logo + event title
+      - Gold accent divider
+      - Serif body text (Times New Roman) for the formal tone
+      - QR code info block with dashed border
+      - Gold left-border tip callout
+      - Navy footer with fine print
+    """
+    brand_name = cfg.get("brand_name",    "Wameedh SC x HolyTech")
+    accent     = cfg.get("brand_accent",  "#F5B700")
+    greeting   = cfg.get("greeting",      "Good luck and see you soon.")
 
-    logo_html = (
+    # Color palette — primary blue with complements
+    primary    = "#225c94"
+    primary_dark = "#1a4470"
+    primary_light = "#3a7fc0"
+    primary_pale = "#e8f1f7"
+    navy_lt    = "#5a8bc4"
+
+    logo_block = (
         f'<img src="cid:{logo_cid}" alt="{brand_name}" '
-        f'style="height:52px;display:block;margin:0 auto 10px auto;">'
-        if logo_cid else ""
+        f'style="height:65px;display:block;object-fit:contain;" />'
+        if logo_cid
+        else f'<span style="font-family:Arial,sans-serif;font-size:24px;font-weight:700;'
+             f'color:{primary};letter-spacing:1px;">W</span>'
+    )
+
+    qr_img_block = (
+        f'<img src="cid:{qr_cid}" alt="Your QR Code" '
+        f'style="width:80px;height:80px;border:2px dashed {primary};" />'
+        if qr_cid
+        else f'<table role="presentation" cellpadding="0" cellspacing="0" '
+             f'style="border:2px dashed {primary};width:80px;height:80px;"> '
+             f'<tr><td align="center" valign="middle"> '
+             f'<span style="font-family:Arial,sans-serif;font-size:24px; '
+             f'color:{primary};opacity:0.35;">&#9707;</span> '
+             f'</td></tr></table>'
     )
 
     return textwrap.dedent(f"""
-    <html><body style="margin:0;padding:0;background:{background};">
-      <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:{background};">
-        <tr><td align="center" style="padding:28px 12px;">
-          <table role="presentation" width="100%" cellpadding="0" cellspacing="0"
-                 style="max-width:600px;background:#fff;border-radius:18px;overflow:hidden;
-                        font-family:Trebuchet MS,Verdana,Arial,sans-serif;color:{text_color};
-                        box-shadow:0 10px 28px rgba(16,24,40,.12);">
-            <tr>
-              <td style="background:{primary};padding:20px 28px;text-align:center;color:#fff;">
-                {logo_html}
-                <div style="font-size:14px;letter-spacing:2px;text-transform:uppercase;font-weight:600;">{brand_name}</div>
-              </td>
-            </tr>
-            <tr>
-              <td style="padding:28px;">
-                <div style="font-size:22px;font-weight:700;color:{primary};margin-bottom:10px;">{headline}</div>
-                <div style="font-size:16px;line-height:1.7;">Hi {name},</div>
-                <div style="font-size:16px;line-height:1.7;margin-top:10px;">
-                  Thanks for registering. Your QR code is attached — please show it at check-in.
-                </div>
-                <table role="presentation" width="100%" cellpadding="0" cellspacing="0"
-                       style="margin-top:18px;background:{background};border-left:4px solid {accent};border-radius:12px;">
-                  <tr><td style="padding:12px 14px;font-size:14px;line-height:1.6;">
-                    Check-in tip: keep this email handy and have your ID ready.
-                  </td></tr>
-                </table>
-                <div style="font-size:16px;line-height:1.7;margin-top:16px;">{greeting}</div>
-              </td>
-            </tr>
-            <tr>
-              <td style="padding:0 28px 24px 28px;">
-                <div style="height:1px;background:#E3E6EA;"></div>
-                <div style="font-size:12px;color:#6B7280;margin-top:12px;">
-                  If anything looks wrong, reply to this email and we will help.
-                </div>
-              </td>
-            </tr>
-          </table>
-        </td></tr>
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      <style>
+        body {{ margin:0; padding:0; background:#f4f4f4; font-family:'Times New Roman',Times,serif; }}
+        .email-container {{ width:100%; background:#f4f4f4; }}
+        .email-wrapper {{ max-width:600px; margin:0 auto; background:#ffffff; }}
+      </style>
+    </head>
+    <body style="margin:0;padding:0;background:#f4f4f4;">
+
+    <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#f4f4f4;">
+    <tr><td align="center" style="padding:20px 10px;">
+
+      <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="max-width:600px;background:#ffffff;">
+
+        <!-- Top accent bar -->
+        <tr><td style="background:{primary_dark};height:8px;font-size:0;line-height:0;">&nbsp;</td></tr>
+
+        <!-- Header: primary bg, logo left, title right -->
+        <tr>
+          <td style="background:{primary};padding:24px 28px;">
+            <table role="presentation" width="100%" cellpadding="0" cellspacing="0">
+              <tr>
+                <td style="width:100px;vertical-align:middle;padding-right:16px;">
+                  <div style="background:{primary_pale};border-radius:4px;padding:10px 12px;
+                               display:inline-block;line-height:1;text-align:center;width:auto;">
+                    {logo_block}
+                  </div>
+                </td>
+                <td style="vertical-align:middle;">
+                  <div style="font-family:Arial,Helvetica,sans-serif;font-size:16px;
+                               font-weight:700;color:#ffffff;margin:0 0 4px 0;
+                               letter-spacing:0.3px;">{brand_name}</div>
+                  <div style="font-family:Arial,Helvetica,sans-serif;font-size:11px;
+                               color:{navy_lt};letter-spacing:1px;
+                               text-transform:uppercase;">Official Participant Communication</div>
+                </td>
+              </tr>
+            </table>
+          </td>
+        </tr>
+
+        <!-- Gold + primary divider bar -->
+        <tr>
+          <td style="font-size:0;line-height:0;">
+            <table role="presentation" width="100%" cellpadding="0" cellspacing="0">
+              <tr>
+                <td style="width:40%;background:{accent};height:5px;font-size:0;">&nbsp;</td>
+                <td style="background:{primary};height:5px;font-size:0;">&nbsp;</td>
+              </tr>
+            </table>
+          </td>
+        </tr>
+
+        <!-- Body -->
+        <tr>
+          <td style="background:#ffffff;padding:32px 32px 26px 32px;">
+
+            <!-- Registration confirmed badge -->
+            <div style="display:inline-block;border:1px solid {primary};
+                         font-family:Arial,Helvetica,sans-serif;
+                         font-size:10px;font-weight:700;color:{primary};
+                         letter-spacing:1.2px;text-transform:uppercase;
+                         padding:4px 12px;margin-bottom:24px;">
+              Registration Confirmed
+            </div>
+
+            <!-- Salutation -->
+            <p style="font-size:15px;color:#222222;margin:0 0 14px 0;line-height:1.7;">
+              Dear <strong>{name}</strong>,
+            </p>
+
+            <!-- Intro paragraph -->
+            <p style="font-size:14px;color:#333333;line-height:1.8;margin:0 0 16px 0;">
+              We are pleased to confirm your registration for the
+              <strong>{brand_name}</strong>.
+              Your personal QR code has been generated and is shown below.
+            </p>
+
+            <!-- QR info block -->
+            <table role="presentation" width="100%" cellpadding="0" cellspacing="0"
+                   style="border:1px solid #dde3ec;background:{primary_pale};margin:20px 0;">
+              <tr>
+                <td style="padding:20px 20px;width:110px;vertical-align:middle;text-align:center;">
+                  {qr_img_block}
+                </td>
+                <td style="padding:20px 20px 20px 12px;vertical-align:middle;">
+                  <div style="font-family:Arial,Helvetica,sans-serif;font-size:13px;
+                               font-weight:700;color:{primary};margin-bottom:6px;">
+                    Your QR Code — {name}
+                  </div>
+                  <div style="font-family:Arial,Helvetica,sans-serif;font-size:12px;
+                               color:#555555;line-height:1.6;">
+                    Present this QR code at the check-in desk upon arrival.
+                    Show it directly from your device or print it before coming.
+                  </div>
+                </td>
+              </tr>
+            </table>
+
+            <!-- Tip callout — gold left border -->
+            <table role="presentation" width="100%" cellpadding="0" cellspacing="0"
+                   style="border-left:4px solid {accent};background:#fffdf0;margin:18px 0;">
+              <tr>
+                <td style="padding:12px 14px;font-family:Arial,Helvetica,sans-serif;
+                            font-size:12px;color:#444444;line-height:1.6;">
+                  <strong style="color:{primary};">Check-in tip:</strong>
+                  Ensure your screen brightness is set to maximum when presenting
+                  the QR code for scanning. A printed copy is equally acceptable.
+                </td>
+              </tr>
+            </table>
+
+            <!-- Second paragraph -->
+            <p style="font-size:14px;color:#333333;line-height:1.8;margin:0 0 18px 0;">
+              If you encounter any issues or have questions prior to the event,
+              please reply to this email and our team will assist you promptly.
+            </p>
+
+            <!-- Closing -->
+            <p style="font-size:14px;color:#333333;line-height:1.8;margin:0 0 6px 0;">
+              {greeting}
+            </p>
+            <p style="font-size:14px;color:#333333;line-height:1.8;margin:0 0 4px 0;">
+              With warm regards,
+            </p>
+            <div style="font-family:Arial,Helvetica,sans-serif;font-size:13px;
+                         font-weight:700;color:{primary};margin-top:8px;">
+              The {brand_name} Team
+            </div>
+            <div style="font-family:Arial,Helvetica,sans-serif;font-size:11px;
+                         color:#777777;letter-spacing:0.3px;">
+              Organizing Committee &middot; Wameedh SC x HolyTech
+            </div>
+
+          </td>
+        </tr>
+
+        <!-- Footer -->
+        <tr>
+          <td style="background:{primary};padding:18px 28px;">
+            <table role="presentation" width="100%" cellpadding="0" cellspacing="0"
+                   style="border-top:1px solid {primary_dark};padding-top:14px;">
+              <tr>
+                <td>
+                  <p style="font-family:Arial,Helvetica,sans-serif;font-size:10px;
+                              color:{navy_lt};margin:0;line-height:1.7;">
+                    This is an automated message sent on behalf of the {brand_name}.<br>
+                    Please do not reply directly — contact the organizing team for assistance.
+                  </p>
+                </td>
+                <td align="right" style="vertical-align:top;">
+                  <div style="font-family:Arial,Helvetica,sans-serif;font-size:9px;
+                               color:{navy_lt};letter-spacing:1px;
+                               text-transform:uppercase;text-align:right;line-height:1.7;">
+                    Wameedh SC<br>x HolyTech
+                  </div>
+                </td>
+              </tr>
+            </table>
+          </td>
+        </tr>
+
+        <!-- Bottom accent bar -->
+        <tr><td style="background:{accent};height:5px;font-size:0;line-height:0;">&nbsp;</td></tr>
+
       </table>
-    </body></html>
+    </td></tr>
+    </table>
+
+    </body>
+    </html>
     """).strip()
 
 
@@ -131,14 +294,19 @@ def send_one(cfg: dict, recipient: str, name: str, qr_dir: str) -> dict:
         msg["From"]    = sender
         msg["To"]      = recipient
         msg["Subject"] = subject
-        msg.set_content(f"Hi {name},\n\nYour QR code is attached. Please show it at check-in.\n")
+        msg.set_content(f"Hi {name},\n\nYour QR code is embedded in the HTML version of this email.\n")
 
         # Logo embed
         logo_path = cfg.get("logo_path", DEFAULT_LOGO)
         logo_cid  = LOGO_CID if (logo_path and os.path.exists(logo_path)) else None
 
-        msg.add_alternative(build_html(name, cfg, logo_cid), subtype="html")
+        # QR embed
+        qr_path = ensure_qr(name, qr_dir)
+        qr_cid  = QR_CID if qr_path else None
 
+        msg.add_alternative(build_html(name, cfg, logo_cid, qr_cid), subtype="html")
+
+        # Embed logo as related image
         if logo_cid:
             mime, _ = mimetypes.guess_type(logo_path)
             main, sub = (mime or "image/png").split("/", 1)
@@ -147,12 +315,12 @@ def send_one(cfg: dict, recipient: str, name: str, qr_dir: str) -> dict:
                 html_part.add_related(f.read(), maintype=main, subtype=sub,
                                       cid=logo_cid, filename=os.path.basename(logo_path))
 
-        # QR attachment
-        qr_path = ensure_qr(name, qr_dir)
-        if qr_path:
+        # Embed QR code as related image
+        if qr_cid:
             with open(qr_path, "rb") as f:
-                msg.add_attachment(f.read(), maintype="image", subtype="png",
-                                   filename=os.path.basename(qr_path))
+                html_part = msg.get_payload()[-1]
+                html_part.add_related(f.read(), maintype="image", subtype="png",
+                                      cid=qr_cid, filename=os.path.basename(qr_path))
 
         with smtp_connect(cfg) as server:
             server.send_message(msg)
