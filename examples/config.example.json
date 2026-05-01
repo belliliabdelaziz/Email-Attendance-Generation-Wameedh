@@ -1,0 +1,23 @@
+{
+  "room": "3",
+  "session": "3",
+  "csvfile": "participants.csv",
+  "email": {
+    "smtp_host": "smtp.gmail.com",
+    "smtp_port": 465,
+    "smtp_use_ssl": true,
+    "smtp_user": "",
+    "smtp_pass": "",
+    "sender": "",
+    "subject": "Your QR code for Wameedh SC Bootcamp",
+    "body_template": "Hi {name},\n\nThanks for registering for Wameedh SC Bootcamp. Your QR code is attached - please show it at check-in.\n\nGood luck and see you soon.\n",
+    "logo_path": "logoBootcamp.png",
+    "brand_name": "Wameedh SC Bootcamp",
+    "brand_primary": "#0B4F6C",
+    "brand_accent": "#F5B700",
+    "brand_background": "#F6F7FB",
+    "brand_text": "#1F2933",
+    "headline": "Your QR code is ready",
+    "greeting": "Good luck and see you soon."
+  }
+}

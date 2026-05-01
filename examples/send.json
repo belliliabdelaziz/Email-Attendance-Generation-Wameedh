@@ -1,0 +1,16 @@
+{
+  "email": {
+    "smtp_host": "smtp.gmail.com",
+    "smtp_port": 465,
+    "smtp_use_ssl": true,
+    "smtp_user": "youremail@example.com",
+    "smtp_pass": "your_app_password",
+    "sender": "youremail@example.com",
+    "logo_path": "logoBootcamp.png"
+  },
+  "participants": [
+    { "name": "Alice Example", "email": "alice@example.com" },
+    { "name": "Bob Example", "email": "bob@example.com" }
+  ],
+  "qr_dir": "qr_out"
+}

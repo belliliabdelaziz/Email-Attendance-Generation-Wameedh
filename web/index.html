@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Wameedh SC — Bootcamp Attendance</title>
+  <link rel="stylesheet" href="style.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet" />
+</head>
+<body>
+
+  <!-- ===== SIDEBAR NAV ===== -->
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-brand">
+      <div class="brand-logos">
+        <img src="/assets/wameedh.png" alt="Wameedh" class="logo-main" id="logoMain" onerror="this.style.display='none'" />
+        <div class="logo-partners">
+          <img src="/assets/holytech_sticker.png" alt="HolyTech" class="logo-partner" id="logoHoly" onerror="this.style.display='none'" />
+          <img src="/assets/ART_sticker.png" alt="Art Competition" class="logo-partner" id="logoArt" onerror="this.style.display='none'" />
+        </div>
+      </div>
+      <div class="brand-text">
+        <span class="brand-name">Wameedh SC</span>
+        <span class="brand-sub">Bootcamp System</span>
+      </div>
+    </div>
+
+    <nav class="nav-links">
+      <a href="#" class="nav-item active" data-page="participants">
+        <svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+        Participants
+      </a>
+      <a href="#" class="nav-item" data-page="qr">
+        <svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="3" height="3"/><rect x="19" y="14" width="2" height="2"/><rect x="14" y="19" width="2" height="2"/><rect x="18" y="18" width="3" height="3"/></svg>
+        QR & Email
+      </a>
+      <a href="#" class="nav-item" data-page="scanner">
+        <svg viewBox="0 0 24 24"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
+        Scanner
+      </a>
+    </nav>
+
+    <div class="sidebar-footer">
+      <div class="session-badge">
+        <span>Session</span>
+        <select id="globalSession">
+          <option>1</option><option>2</option><option>3</option><option>4</option>
+        </select>
+      </div>
+    </div>
+  </aside>
+
+  <!-- ===== MAIN CONTENT ===== -->
+  <main class="main-content">
+
+    <!-- ======= PAGE: PARTICIPANTS ======= -->
+    <section class="page active" id="page-participants">
+      <div class="page-header">
+        <div>
+          <h1 class="page-title">Participants</h1>
+          <p class="page-desc">Build or import your CSV participant list</p>
+        </div>
+        <div class="header-actions">
+          <label class="btn btn-outline" for="csvUpload">
+            <svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+            Import CSV
+          </label>
+          <input type="file" id="csvUpload" accept=".csv" style="display:none" />
+          <button class="btn btn-ghost" id="addRowBtn">
+            <svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+            Add Row
+          </button>
+          <button class="btn btn-primary" id="exportCsvBtn">
+            <svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            Export CSV
+          </button>
+        </div>
+      </div>
+
+      <!-- Stats bar (simplified) -->
+      <div class="stats-row">
+        <div class="stat-card">
+          <div class="stat-num" id="statTotal">0</div>
+          <div class="stat-label">Total</div>
+        </div>
+        <div class="stat-card accent">
+          <div class="stat-num" id="statChecked">0</div>
+          <div class="stat-label">Checked In</div>
+        </div>
+      </div>
+
+      <!-- Search + filter -->
+      <div class="table-toolbar">
+        <div class="search-wrap">
+          <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+          <input type="text" id="searchInput" placeholder="Search by name or email…" />
+        </div>
+      </div>
+
+      <!-- Table -->
+      <div class="table-wrap">
+        <table class="data-table" id="participantsTable">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Email</th>
+              <th>First Name</th>
+              <th>Last Name</th>
+              <th>Status</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody id="tableBody">
+            <!-- rows injected by JS -->
+          </tbody>
+        </table>
+        <div class="table-empty" id="tableEmpty">
+          <svg viewBox="0 0 24 24"><path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"/><polyline points="13 2 13 9 20 9"/></svg>
+          <p>No participants yet — add a row or import a CSV</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ======= PAGE: QR & EMAIL ======= -->
+    <section class="page" id="page-qr">
+      <div class="page-header">
+        <div>
+          <h1 class="page-title">QR & Email</h1>
+          <p class="page-desc">Generate QR codes and send personalised emails</p>
+        </div>
+      </div>
+
+      <div class="two-col">
+
+        <!-- LEFT: QR Generator -->
+        <div class="card">
+          <div class="card-header">
+            <span class="card-icon qr-icon">
+              <svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="3" height="3"/></svg>
+            </span>
+            <div>
+              <h2 class="card-title">QR Generator</h2>
+              <p class="card-sub">Generate QR images for all participants</p>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label>Output Directory</label>
+            <input type="text" class="form-input" id="outputDir" value="qr_out" />
+          </div>
+
+          <div class="qr-preview-area" id="qrPreviewArea">
+            <div class="qr-placeholder">
+              <svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+              <span>QR codes will appear here</span>
+            </div>
+          </div>
+
+          <button class="btn btn-primary full-btn" id="generateQrBtn">
+            <svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+            Generate All QR Codes
+          </button>
+          <button class="btn btn-outline full-btn" id="downloadAllBtn" style="margin-top:10px;display:none">
+            <svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            Download ZIP
+          </button>
+        </div>
+
+        <!-- RIGHT: Email Config -->
+        <div class="card">
+          <div class="card-header">
+            <span class="card-icon email-icon">
+              <svg viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+            </span>
+            <div style="flex:1">
+              <h2 class="card-title">Email Settings</h2>
+              <p class="card-sub">Configure SMTP and message template</p>
+            </div>
+            <label class="btn btn-ghost load-config-btn" for="configJsonUpload" title="Load from config.json">
+              <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="12" y1="18" x2="12" y2="12"/><line x1="9" y1="15" x2="15" y2="15"/></svg>
+              Load config.json
+            </label>
+            <input type="file" id="configJsonUpload" accept=".json" style="display:none" />
+          </div>
+
+          <div class="form-grid">
+            <div class="form-group">
+              <label>SMTP Host</label>
+              <input type="text" class="form-input" id="smtpHost" value="smtp.gmail.com" />
+            </div>
+            <div class="form-group">
+              <label>Port</label>
+              <input type="number" class="form-input" id="smtpPort" value="465" />
+            </div>
+            <div class="form-group span2">
+              <label>Sender Email</label>
+              <input type="email" class="form-input" id="smtpSender" placeholder="your@email.com" />
+            </div>
+            <div class="form-group span2">
+              <label>App Password</label>
+              <input type="password" class="form-input" id="smtpPass" placeholder="••••••••••••" />
+            </div>
+            <div class="form-group span2">
+              <label>Email Subject</label>
+              <input type="text" class="form-input" id="emailSubject" value="Your QR code — Wameedh SC Bootcamp" />
+            </div>
+            <div class="form-group span2">
+              <label>Headline</label>
+              <input type="text" class="form-input" id="emailHeadline" value="Your QR code" />
+            </div>
+            <div class="form-group span2">
+              <label>Closing Greeting</label>
+              <input type="text" class="form-input" id="emailGreeting" value="Good luck and see you soon." />
+            </div>
+          </div>
+
+          <div class="ssl-toggle">
+            <label class="toggle-label">
+              <input type="checkbox" id="smtpSSL" checked />
+              <span class="toggle-track"><span class="toggle-thumb"></span></span>
+              Use SSL
+            </label>
+          </div>
+
+          <div class="send-actions">
+            <button class="btn btn-outline" id="testEmailBtn">
+              <svg viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+              Test Connection
+            </button>
+            <button class="btn btn-primary" id="sendAllBtn">
+              <svg viewBox="0 0 24 24"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+              Send All Emails
+            </button>
+          </div>
+
+          <div class="send-log" id="sendLog"></div>
+        </div>
+      </div>
+
+      <!-- Config Export -->
+      <div class="card config-card">
+        <div class="card-header">
+          <span class="card-icon config-icon">
+            <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14M4.93 4.93a10 10 0 0 0 0 14.14"/></svg>
+          </span>
+          <div>
+            <h2 class="card-title">Export config.json</h2>
+            <p class="card-sub">Save all settings to use with the Python scripts</p>
+          </div>
+        </div>
+        <div class="config-preview" id="configPreview"></div>
+        <div class="config-actions">
+          <button class="btn btn-outline" id="refreshConfigBtn">Refresh Preview</button>
+          <button class="btn btn-primary" id="downloadConfigBtn">
+            <svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            Download config.json
+          </button>
+          <button class="btn btn-primary" id="downloadParticipantsBtn">
+            <svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            Download participants.csv
+          </button>
+        </div>
+      </div>
+    </section>
+
+
+    <!-- ======= PAGE: SCANNER ======= -->
+    <section class="page" id="page-scanner">
+      <div class="page-header">
+        <div>
+          <h1 class="page-title">QR Scanner</h1>
+          <p class="page-desc">Point the camera at a participant's QR code to record attendance</p>
+        </div>
+        <div class="header-actions">
+          <button class="btn btn-outline" id="exportAttendanceBtn">
+            <svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            Export Attendance
+          </button>
+        </div>
+      </div>
+
+      <div class="scanner-layout">
+
+        <!-- Camera feed -->
+        <div class="camera-card">
+          <div class="cam-viewport" id="camViewport">
+            <video id="camVideo" autoplay playsinline muted></video>
+            <canvas id="camCanvas" style="display:none"></canvas>
+            <img src="/assets/holytech_sticker.png" alt="HolyTech" class="cam-logo left" onerror="this.style.display='none'" />
+            <img src="/assets/ART_sticker.png" alt="Art Competition" class="cam-logo right" onerror="this.style.display='none'" />
+
+            <div class="scan-frame">
+              <div class="corner tl"></div>
+              <div class="corner tr"></div>
+              <div class="corner bl"></div>
+              <div class="corner br"></div>
+              <div class="scan-line" id="scanLine"></div>
+            </div>
+
+            <div class="cam-status" id="camStatus">
+              <svg viewBox="0 0 24 24"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
+              <span>Click Start Camera to begin scanning</span>
+            </div>
+
+            <div class="scan-result-overlay hidden" id="scanResultOverlay">
+              <div class="scan-result-icon" id="scanResultIcon"></div>
+              <div class="scan-result-name" id="scanResultName"></div>
+              <div class="scan-result-msg"  id="scanResultMsg"></div>
+            </div>
+          </div>
+
+          <div class="cam-controls">
+            <button class="btn btn-primary" id="startCamBtn">
+              <svg viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+              Start Camera
+            </button>
+            <button class="btn btn-ghost" id="stopCamBtn" disabled>
+              <svg viewBox="0 0 24 24"><rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/></svg>
+              Stop
+            </button>
+            <select id="cameraSelect" class="filter-select" style="min-width:180px;">
+              <option value="">Default Camera</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Right panel -->
+        <div class="scanner-right">
+
+          <div class="card scan-stats-card">
+            <h2 class="card-title" style="font-size:15px;margin-bottom:14px;">Today's Check-ins</h2>
+            <div class="scan-stats-row">
+              <div class="scan-stat">
+                <div class="scan-stat-num ok" id="scanCheckedIn">0</div>
+                <div class="scan-stat-label">Checked In</div>
+              </div>
+              <div class="scan-stat">
+                <div class="scan-stat-num absent" id="scanAbsent">0</div>
+                <div class="scan-stat-label">Absent</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="card scan-log-card">
+            <div class="scan-log-header">
+              <h2 class="card-title" style="font-size:15px;">Scan Log</h2>
+              <button class="btn btn-ghost" id="clearLogBtn" style="padding:6px 12px;font-size:12px;">Clear</button>
+            </div>
+            <div class="scan-log-list" id="scanLogList">
+              <div class="scan-log-empty">No scans yet</div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Toast -->
+  <div class="toast" id="toast"></div>
+
+  <script src="app.js"></script>
+</body>
+</html>
